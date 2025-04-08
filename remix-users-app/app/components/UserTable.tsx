@@ -3,7 +3,7 @@ import './UserTable.css';
 import { UserTableProps } from '../types';
 import { UserRow } from './UserRow';
 
-export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onSort, sortState }) => {
+export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onSort}) => {
   const handleSort = (column: keyof typeof users[0]) => {
     onSort(column);
   };
