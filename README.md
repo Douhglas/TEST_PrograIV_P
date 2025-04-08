@@ -1,15 +1,16 @@
-Integrantes: 
+Members:
 + Brayan Carmona Garro
 + Douglas Ramirez Morales
 + Jazmín Gamboa Chacon
 + Joshua Elizondo Abarca
 + Noemí Murillo Godinez
 
-Instalacion:
-Estando en el directorio del proyecto
+Installation: 
 
-Instala las dependencias:
+While in the project directory
+
+Install the dependencies:
 npm install
 
-Inicia el servidor de desarrollo:
+Start the development server:
 npm run dev
