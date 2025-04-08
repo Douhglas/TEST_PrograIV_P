@@ -5,10 +5,8 @@ import { Loading } from '~/components/Loading';
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { useUsers } from '~/hooks/useUsers';
 
-
-
 export default function Index() {
-  const { users,setUsers, loading, error } = useUsers();
+  const { users, setUsers, loading, error } = useUsers();
 
   const [sortState, setSortState] = useState<{
     column: keyof User;
@@ -42,16 +40,18 @@ export default function Index() {
   if (error) return <ErrorMessage message={error} />;
 
   return (
-    <main className='main'>
-      <div className='main-div'>
-      <h1>User List</h1>
-      <UserTable
-        users={users}
-        onDelete={handleDelete}
-        onSort={handleSort}
-        sortState={sortState}
-      />
-      </div>
+    <main className="main">
+      {!loading && !error && (
+        <div className="main-div">
+          <h1>User List</h1>
+          <UserTable
+            users={users}
+            onDelete={handleDelete}
+            onSort={handleSort}
+            sortState={sortState}
+          />
+        </div>
+      )}
     </main>
   );
 }
