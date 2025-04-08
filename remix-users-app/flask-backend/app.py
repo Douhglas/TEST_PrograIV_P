@@ -8,7 +8,7 @@ CORS(app)
 
 def load_users():
     # Cambiar 'data/users-simple.json' por 'data/users.json' para usar el otro archivo de datos 
-    with open('data/users-simple.json', 'r', encoding='utf-8') as file:
+    with open('data/users.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
         return data["results"]
 
