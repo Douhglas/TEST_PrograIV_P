@@ -4,6 +4,7 @@ import { UserTable } from '~/components/UserTable';
 import { Loading } from '~/components/Loading';
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { useUsers } from '~/hooks/useUsers';
+import { useDebounce } from '~/hooks/useDebounce'; 
 
 export default function Index() {
   const { users, setUsers, loading, error } = useUsers();
@@ -17,6 +18,7 @@ export default function Index() {
   });
 
   const [filterText, setFilterText] = useState('');
+  const debouncedFilter = useDebounce(filterText, 300); 
 
   const handleDelete = (id: string) => {
     setUsers((prev) => prev.filter((user) => user.id !== id));
@@ -41,9 +43,9 @@ export default function Index() {
 
   const filteredUsers = useMemo(() => {
     return sortedUsers.filter((user) =>
-      user.country.toLowerCase().startsWith(filterText.toLowerCase())
+      user.country.toLowerCase().startsWith(debouncedFilter.toLowerCase()) 
     );
-  }, [sortedUsers, filterText]);
+  }, [sortedUsers, debouncedFilter]);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -53,7 +55,6 @@ export default function Index() {
       <div className='main-div'>
         <h1>User List</h1>
 
-        {}
         <input
           type='text'
           placeholder='Filter by country...'
