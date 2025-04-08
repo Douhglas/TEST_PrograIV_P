@@ -1,30 +1,21 @@
 from flask import Flask, jsonify
-import requests
+from flask_cors import CORS
+import json
+import random
 
 app = Flask(__name__)
+CORS(app)
 
-@app.route('/users')
+def load_users():
+    with open('data/users.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+        return data["results"]
+
+@app.route('/api/users')
 def get_users():
-    try:
-        # Call the external API to generate users
-        response = requests.get("https://randomuser.me/api/?results=75&nat=us,es,mx,br,fr,ca,gb")
-        data = response.json()
-
-        users = []
-
-        for item in data["results"]:
-            user = {
-                "first_name": item["name"]["first"],
-                "last_name": item["name"]["last"],
-                "country": item["location"]["country"],
-                "photo": item["picture"]["medium"]
-            }
-            users.append(user)
-
-        return jsonify(users)
-
-    except Exception as e:
-        return jsonify({"error": "Could not fetch users", "details": str(e)}), 500
+    all_users = load_users()
+    random_users = random.sample(all_users, 75)
+    return jsonify({"results": random_users})
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -8,14 +8,31 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onDelete, onSort, s
     onSort(column);
   };
 
+  const getSortIndicator = (column: string) => {
+    if (sortState?.column !== column) {
+      return <span className="sort-indicator" style={{ visibility: 'hidden' }}>🔼</span>;
+    }
+    return (
+      <span className="sort-indicator">
+        {sortState.ascending ? '🔼' : '🔽'}
+      </span>
+    );
+  };
+
   return (
     <table>
       <thead>
         <tr>
           <th>Photo</th>
-          <th onClick={() => handleSort('firstName')}>First Name</th>
-          <th onClick={() => handleSort('lastName')}>Last Name</th>
-          <th onClick={() => handleSort('country')}>Country</th>
+          <th onClick={() => handleSort('firstName')}>
+            First Name {getSortIndicator('firstName')}
+          </th>
+          <th onClick={() => handleSort('lastName')}>
+            Last Name {getSortIndicator('lastName')}
+          </th>
+          <th onClick={() => handleSort('country')}>
+            Country {getSortIndicator('country')}
+          </th>
           <th>Actions</th>
         </tr>
       </thead>
