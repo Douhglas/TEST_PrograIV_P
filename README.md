@@ -1,6 +1,6 @@
 Integrantes: 
-+ Brian Carmona
-+ Douglas Ramirez
-+ Jazmín Gamboa
-+ Joshua Elizondo
-+ Noemí Murillo
++ Brayan Carmona Garro
++ Douglas Ramirez Morales
++ Jazmín Gamboa Chacon
++ Joshua Elizondo Abarca
++ Noemí Murillo Godinez
