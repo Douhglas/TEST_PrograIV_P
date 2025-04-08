@@ -107,6 +107,17 @@
   .main{
     padding: 2em;
   }
+
+  th {
+    position: relative;
+    white-space: nowrap;
+  }
+  
+  .sort-indicator {
+    margin-left: 4px;
+    display: inline-block;
+    width: 1em;
+  }
   
   
   @media (max-width: 768px) {
