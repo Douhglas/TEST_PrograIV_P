@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { User } from '~/types';
 import { UserTable } from '~/components/UserTable';
 import { Loading } from '~/components/Loading';
@@ -36,11 +36,10 @@ export default function Index() {
     }));
   };
 
-  if (loading) return <Loading />;
-  if (error) return <ErrorMessage message={error} />;
-
   return (
-    <main className="main">
+    <main className="main" aria-live="polite">
+      {loading && <Loading />}
+      {error && <ErrorMessage message={error} />}
       {!loading && !error && (
         <div className="main-div">
           <h1>User List</h1>
