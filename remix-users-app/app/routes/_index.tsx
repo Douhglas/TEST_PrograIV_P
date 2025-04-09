@@ -47,7 +47,6 @@ export default function Index() {
     });
   }, [users, sortState]);
 
-  
   const filteredUsers = useMemo(() => {
     const search = debouncedFilter.toLowerCase();
     return sortedUsers.filter((user) =>
@@ -61,18 +60,16 @@ export default function Index() {
       {error && <ErrorMessage message={error} />}
       {!loading && !error && (
         <div className="main-div">
-          <h1>User List</h1>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+            <input
+              type="text"
+              placeholder="🔍 Filter by country..."
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              className="filter-input"
+            />
+          </div>
 
-          {}
-          <input
-            type="text"
-            placeholder="Filter by country..."
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
-            className="mb-4 p-2 border rounded"
-          />
-
-          {}
           <UserTable
             users={filteredUsers}
             onDelete={handleDelete}
