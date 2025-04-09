@@ -3,7 +3,7 @@ import type { User } from '~/types';
 
 export const useUsers = () => {
     const [users, setUsers] = useState<User[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {

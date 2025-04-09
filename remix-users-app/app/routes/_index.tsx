@@ -6,6 +6,7 @@ import { ErrorMessage } from '~/components/ErrorMessage';
 import { useUsers } from '~/hooks/useUsers';
 import { useDebounce } from '~/hooks/useDebounce'; 
 
+
 export default function Index() {
   const { users, setUsers, loading, error } = useUsers();
 
@@ -30,7 +31,7 @@ export default function Index() {
       ascending: column === prev.column ? !prev.ascending : true,
     }));
   };
-
+  
   const sortedUsers = useMemo(() => {
     return [...users].sort((a, b) => {
       const aVal = (a[sortState.column] as string).toLowerCase();
@@ -47,29 +48,28 @@ export default function Index() {
     );
   }, [sortedUsers, debouncedFilter]);
 
-  if (loading) return <Loading />;
-  if (error) return <ErrorMessage message={error} />;
-
   return (
-    <main className='main'>
-      <div className='main-div'>
-        <h1>User List</h1>
-
-        <input
-          type='text'
-          placeholder='Filter by country...'
-          value={filterText}
-          onChange={(e) => setFilterText(e.target.value)}
-          className='mb-4 p-2 border rounded'
-        />
-
-        <UserTable
-          users={filteredUsers}
-          onDelete={handleDelete}
-          onSort={handleSort}
-          sortState={sortState}
-        />
-      </div>
+    <main className="main" aria-live="polite">
+      {loading && <Loading />}
+      {error && <ErrorMessage message={error} />}
+      {!loading && !error && (
+        <div className="main-div">
+          <h1>User List</h1>
+          <input
+            type='text'
+            placeholder='Filter by country...'
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+            className='mb-4 p-2 border rounded'
+          />
+          <UserTable
+            users={users}
+            onDelete={handleDelete}
+            onSort={handleSort}
+            sortState={sortState}
+          />
+        </div>
+      )}
     </main>
   );
 }
