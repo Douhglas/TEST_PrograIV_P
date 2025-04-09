@@ -4,8 +4,7 @@ import { UserTable } from '~/components/UserTable';
 import { Loading } from '~/components/Loading';
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { useUsers } from '~/hooks/useUsers';
-import { useDebounce } from '~/hooks/useDebounce'; 
-
+import { useDebounce } from '~/hooks/useDebounce';
 
 export default function Index() {
   const { users, setUsers, loading, error } = useUsers();
@@ -19,7 +18,13 @@ export default function Index() {
   });
 
   const [filterText, setFilterText] = useState('');
-  const debouncedFilter = useDebounce(filterText, 300); 
+  const debouncedFilter = useDebounce(filterText, 300);
+
+  useEffect(() => {
+    if (filterText === '') {
+      setSortState({ column: 'country', ascending: true });
+    }
+  }, [filterText]);
 
   const handleDelete = (id: string) => {
     setUsers((prev) => prev.filter((user) => user.id !== id));
@@ -31,20 +36,22 @@ export default function Index() {
       ascending: column === prev.column ? !prev.ascending : true,
     }));
   };
-  
+
   const sortedUsers = useMemo(() => {
     return [...users].sort((a, b) => {
-      const aVal = (a[sortState.column] as string).toLowerCase();
-      const bVal = (b[sortState.column] as string).toLowerCase();
+      const aVal = (a[sortState.column] as string)?.toLowerCase() ?? '';
+      const bVal = (b[sortState.column] as string)?.toLowerCase() ?? '';
       if (aVal < bVal) return sortState.ascending ? -1 : 1;
       if (aVal > bVal) return sortState.ascending ? 1 : -1;
       return 0;
     });
   }, [users, sortState]);
 
+  
   const filteredUsers = useMemo(() => {
+    const search = debouncedFilter.toLowerCase();
     return sortedUsers.filter((user) =>
-      user.country.toLowerCase().startsWith(debouncedFilter.toLowerCase()) 
+      user.country.toLowerCase().startsWith(search)
     );
   }, [sortedUsers, debouncedFilter]);
 
@@ -55,15 +62,19 @@ export default function Index() {
       {!loading && !error && (
         <div className="main-div">
           <h1>User List</h1>
+
+          {}
           <input
-            type='text'
-            placeholder='Filter by country...'
+            type="text"
+            placeholder="Filter by country..."
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
-            className='mb-4 p-2 border rounded'
+            className="mb-4 p-2 border rounded"
           />
+
+          {}
           <UserTable
-            users={users}
+            users={filteredUsers}
             onDelete={handleDelete}
             onSort={handleSort}
             sortState={sortState}
