@@ -17,13 +17,13 @@ export const useUsers = () => {
             try {
                 const response = await fetch('https://test-prograiv.onrender.com/api/users');
                 if (!response.ok) {
-                    throw new Error('Error al obtener los usuarios');
+                    throw new Error('Failed to fetch users');
                 }
                 const data = await response.json();
                 setUsers(data.results);
                 setOriginalUsers(data.results);
             } catch (err) {
-                setError(err instanceof Error ? err.message : 'Error desconocido');
+                setError(err instanceof Error ? err.message : 'Unknown error');
             } finally {
                 setLoading(false);
             }
