@@ -64,23 +64,6 @@ export default function Index() {
     sortState.ascending &&
     users.length === originalUsers.length;
 
-  const sortedUsers = useMemo(() => {
-    return [...users].sort((a, b) => {
-      const aVal = (a[sortState.column] as string)?.toLowerCase() ?? '';
-      const bVal = (b[sortState.column] as string)?.toLowerCase() ?? '';
-      if (aVal < bVal) return sortState.ascending ? -1 : 1;
-      if (aVal > bVal) return sortState.ascending ? 1 : -1;
-      return 0;
-    });
-  }, [users, sortState]);
-
-  const filteredUsers = useMemo(() => {
-    const search = debouncedFilter.toLowerCase();
-    return sortedUsers.filter((user) =>
-      user.country.toLowerCase().startsWith(search)
-    );
-  }, [sortedUsers, debouncedFilter]);
-
   return (
     <main className="main bg-white text-black dark:bg-zinc-900 dark:text-white px-0 sm:px-4" aria-live="polite">
       {loading && <Loading />}
