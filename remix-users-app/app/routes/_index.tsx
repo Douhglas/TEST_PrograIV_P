@@ -7,7 +7,7 @@ import { useUsers } from '~/hooks/useUsers';
 import { useDebounce } from '~/hooks/useDebounce';
 
 export default function Index() {
-  const { users, setUsers, loading, error } = useUsers();
+  const { users, setUsers, originalUsers, restoreUsers, loading, error } = useUsers();
 
   const [sortState, setSortState] = useState<{
     column: keyof User;
@@ -36,6 +36,18 @@ export default function Index() {
       ascending: column === prev.column ? !prev.ascending : true,
     }));
   };
+
+  const restoreInitialState = () => {
+    restoreUsers();
+    setFilterText('');
+    setSortState({ column: 'country', ascending: true });
+  };
+
+  const isInitialState =
+    filterText === '' &&
+    sortState.column === 'country' &&
+    sortState.ascending &&
+    users.length === originalUsers.length;
 
   const sortedUsers = useMemo(() => {
     return [...users].sort((a, b) => {
@@ -68,6 +80,23 @@ export default function Index() {
               onChange={(e) => setFilterText(e.target.value)}
               className="filter-input"
             />
+            <button
+              onClick={restoreInitialState}
+              disabled={isInitialState}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: isInitialState ? '#cccccc' : '#4CAF50',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: isInitialState ? 'not-allowed' : 'pointer',
+                opacity: isInitialState ? 0.7 : 1,
+                transition: 'background-color 0.2s'
+              }}
+              aria-label="Restore table to initial state"
+            >
+              Restaurar
+            </button>
           </div>
 
           <UserTable
