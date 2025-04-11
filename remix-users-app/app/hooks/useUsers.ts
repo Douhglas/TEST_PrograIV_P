@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { User } from '~/types';
 
+//usar const response = await fetch('http://127.0.0.1:5000/api/users'); para usar el se4rvidor en local 
 export const useUsers = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
@@ -9,7 +10,7 @@ export const useUsers = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/users');
+                const response = await fetch('https://test-prograiv.onrender.com//api/users');
                 if (!response.ok) {
                     throw new Error('Error al obtener los usuarios');
                 }
