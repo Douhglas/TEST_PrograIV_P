@@ -15,7 +15,9 @@ export const useUsers = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+
                 const response = await fetch('https://test-prograiv.onrender.com/api/users');
+
                 if (!response.ok) {
                     throw new Error('Error al obtener los usuarios');
                 }
