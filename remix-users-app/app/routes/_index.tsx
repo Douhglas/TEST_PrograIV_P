@@ -5,8 +5,10 @@ import { Loading } from '~/components/Loading';
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { useUsers } from '~/hooks/useUsers';
 import { useDebounce } from '~/hooks/useDebounce';
+import { useTheme } from '~/components/ThemeProvider';
 
 export default function Index() {
+  const { isDark, toggleTheme } = useTheme();
   const { users, setUsers, originalUsers, restoreUsers, loading, error } = useUsers();
 
   const [sortState, setSortState] = useState<{
@@ -72,6 +74,12 @@ export default function Index() {
       {error && <ErrorMessage message={error} />}
       {!loading && !error && (
         <div className="main-div">
+          <button onClick={toggleTheme} className={`px-4 py-2 border rounded transition-colors duration-300 ${isDark
+              ? "bg-gray-700 text-white border-gray-600 hover:bg-gray-100 hover:text-gray-800"
+              : "bg-gray-300 text-black border-gray-500 hover:bg-gray-800 hover:text-gray-100"
+            }`}>
+            {isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}
+          </button>
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
             <input
               type="text"
