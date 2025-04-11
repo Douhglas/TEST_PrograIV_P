@@ -69,57 +69,91 @@ export default function Index() {
   }, [sortedUsers, debouncedFilter]);
 
   return (
-    <main className="main bg-white text-black dark:bg-zinc-900 dark:text-white" aria-live="polite">
+    <main className="main bg-white text-black dark:bg-zinc-900 dark:text-white px-0 sm:px-4" aria-live="polite">
       {loading && <Loading />}
       {error && <ErrorMessage message={error} />}
+
       {!loading && !error && (
         <div className="main-div">
-          <div className='flex justify-between px-4'>
-          <button onClick={toggleTheme} className={`px-4 py-2 border rounded transition-colors duration-300 ${isDark
-            ? "bg-gray-700 text-white border-gray-600 hover:bg-gray-100 hover:text-gray-800"
-            : "bg-gray-300 text-black border-gray-500 hover:bg-gray-800 hover:text-gray-100"
-            }`}>
-            {isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}
-          </button>
+          {/* Controles superiores - extendidos */}
+          <div className='flex justify-between px-2 sm:px-4 gap-2 sm:gap-4'>
+            <button onClick={toggleTheme} className={`px-3 sm:px-4 py-2 border rounded transition-colors duration-300 flex-1 sm:flex-none ${isDark
+              ? "bg-gray-700 text-white border-gray-600 hover:bg-gray-100 hover:text-gray-800"
+              : "bg-gray-300 text-black border-gray-500 hover:bg-gray-800 hover:text-gray-100"
+              }`}>
+              {isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}
+            </button>
 
-          <button
-            onClick={restoreInitialState}
-            disabled={isInitialState}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: isInitialState ? '#cccccc' : '#4CAF50',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: isInitialState ? 'not-allowed' : 'pointer',
-              opacity: isInitialState ? 0.7 : 1,
-              transition: 'background-color 0.2s'
-            }}
-            aria-label="Restore table to initial state"
-          >
-            Restart table
-          </button> 
+            <button
+              onClick={restoreInitialState}
+              disabled={isInitialState}
+              className={`px-3 sm:px-4 py-2 rounded transition-colors duration-300 flex-1 sm:flex-none ${isInitialState
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-green-500 hover:bg-green-600 text-white"
+                }`}
+              aria-label="Restore table to initial state"
+            >
+              Restart 🔄
+            </button>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+          {/* Filtro - extendido */}
+          <div className="mt-4 mb-6 px-2 sm:px-0">
             <input
               type="text"
               placeholder="🔍 Filter by country..."
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
-              className="filter-input"
+              className="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600"
             />
           </div>
 
+          {/* Vista Desktop - Tabla normal */}
+          <div className="hidden md:block">
+            <UserTable
+              users={filteredUsers}
+              onDelete={handleDelete}
+              onSort={handleSort}
+              sortState={sortState}
+            />
+          </div>
 
-
-
-          <UserTable
-            users={filteredUsers}
-            onDelete={handleDelete}
-            onSort={handleSort}
-            sortState={sortState}
-          />
+          {/* Vista Mobile - Tarjetas extendidas */}
+          <div className="md:hidden space-y-4 px-2">
+            {filteredUsers.length === 0 ? (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                No users found
+              </div>
+            ) : (
+              filteredUsers.map((user) => (
+                <div key={user.id} className="border rounded-lg p-4 dark:border-gray-700 w-full">
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src={user.photo}
+                      alt={`${user.firstName} ${user.lastName}`}
+                      className="w-10 h-10 rounded-full"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="truncate font-medium dark:text-white">
+                        {user.firstName} {user.lastName}
+                      </p>
+                      <p className="truncate text-gray-600 dark:text-gray-300">
+                        {user.country}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex justify-center">
+                    <button
+                      onClick={() => handleDelete(user.id)}
+                      className="px-4 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-colors"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       )}
     </main>
