@@ -5,8 +5,10 @@ import { Loading } from '~/components/Loading';
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { useUsers } from '~/hooks/useUsers';
 import { useDebounce } from '~/hooks/useDebounce';
+import { useTheme } from '~/components/ThemeProvider';
 
 export default function Index() {
+  const { isDark, toggleTheme } = useTheme();
   const { users, setUsers, loading, error } = useUsers();
 
   const [sortState, setSortState] = useState<{
@@ -55,7 +57,10 @@ export default function Index() {
   }, [sortedUsers, debouncedFilter]);
 
   return (
-    <main className="main" aria-live="polite">
+    <main className="main bg-white text-black dark:bg-zinc-900 dark:text-white" aria-live="polite">
+      <button onClick={toggleTheme} className="px-4 py-2 border rounded">
+        {isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}
+      </button>
       {loading && <Loading />}
       {error && <ErrorMessage message={error} />}
       {!loading && !error && (
