@@ -44,3 +44,25 @@ python -m pip show flask
 
 4. Run the Flask server again:
 python app.py
+
+---
+
+## 3. ¿Cómo se evitó el re-renderizado y los cálculos innecesarios?
+
+Durante el desarrollo del proyecto, se aplicaron técnicas para mejorar el rendimiento y reducir cálculos innecesarios. A continuación, un resumen de las más importantes:
+
+### 🔁 1. Memorización con useMemo
+
+Se utilizó useMemo para evitar recomputaciones al ordenar o filtrar usuarios. Estas operaciones se ejecutan solo cuando cambian las dependencias (sortState, filterText) y se centralizaron en el hook useSortedAndFilteredUsers para mantener el código limpio.
+
+### 🧠 2. Estabilidad con useCallback
+
+handleDelete y handleSort fueron memorizadas con useCallback para evitar que cambien de referencia entre renders, lo que ayudó a prevenir re-renderizados en los componentes hijos.
+
+### 🛡️ 3. React.memo en componentes
+
+Se aplicó React.memo a UserRow y UserTable para evitar renders innecesarios cuando las props no cambian, optimizando el comportamiento de la tabla.
+
+### 🔄 4. Debounce en el filtrado
+
+El hook useDebounce permitió retrasar el filtrado hasta que el usuario deje de escribir, lo que evita múltiples actualizaciones rápidas del estado y mejora la UX.
