@@ -5,6 +5,7 @@ import { Loading } from '~/components/Loading';
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { useUsers } from '~/hooks/useUsers';
 import { useDebounce } from '~/hooks/useDebounce';
+import { useCallback } from 'react';
 
 export default function Index() {
   const { users, setUsers, loading, error } = useUsers();
@@ -26,16 +27,17 @@ export default function Index() {
     }
   }, [filterText]);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = useCallback((id: string) => {
     setUsers((prev) => prev.filter((user) => user.id !== id));
-  };
-
-  const handleSort = (column: keyof User) => {
+  }, [setUsers]);
+  
+  const handleSort = useCallback((column: keyof User) => {
     setSortState((prev) => ({
       column,
       ascending: column === prev.column ? !prev.ascending : true,
     }));
-  };
+  }, []);
+  
 
   const sortedUsers = useMemo(() => {
     return [...users].sort((a, b) => {
@@ -53,6 +55,8 @@ export default function Index() {
       user.country.toLowerCase().startsWith(search)
     );
   }, [sortedUsers, debouncedFilter]);
+
+  
 
   return (
     <main className="main" aria-live="polite">
