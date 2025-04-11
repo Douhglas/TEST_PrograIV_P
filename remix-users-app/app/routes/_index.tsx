@@ -1,11 +1,11 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import type { User } from '~/types';
 import { UserTable } from '~/components/UserTable';
 import { Loading } from '~/components/Loading';
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { useUsers } from '~/hooks/useUsers';
-import { useDebounce } from '~/hooks/useDebounce';
 import { useCallback } from 'react';
+import { useSortedAndFilteredUsers } from '~/hooks/useSortedAndFilteredUsers';
 
 export default function Index() {
   const { users, setUsers, loading, error } = useUsers();
@@ -19,7 +19,13 @@ export default function Index() {
   });
 
   const [filterText, setFilterText] = useState('');
-  const debouncedFilter = useDebounce(filterText, 300);
+  
+  const filteredUsers = useSortedAndFilteredUsers(
+    users,
+    sortState.column,
+    sortState.ascending,
+    filterText
+  );
 
   useEffect(() => {
     if (filterText === '') {
@@ -27,44 +33,29 @@ export default function Index() {
     }
   }, [filterText]);
 
-  const handleDelete = useCallback((id: string) => {
-    setUsers((prev) => prev.filter((user) => user.id !== id));
-  }, [setUsers]);
-  
+  const handleDelete = useCallback(
+    (id: string) => {
+      setUsers((prev) => prev.filter((user) => user.id !== id));
+    },
+    [setUsers]
+  );
+
   const handleSort = useCallback((column: keyof User) => {
     setSortState((prev) => ({
       column,
       ascending: column === prev.column ? !prev.ascending : true,
     }));
   }, []);
-  
-
-  const sortedUsers = useMemo(() => {
-    return [...users].sort((a, b) => {
-      const aVal = (a[sortState.column] as string)?.toLowerCase() ?? '';
-      const bVal = (b[sortState.column] as string)?.toLowerCase() ?? '';
-      if (aVal < bVal) return sortState.ascending ? -1 : 1;
-      if (aVal > bVal) return sortState.ascending ? 1 : -1;
-      return 0;
-    });
-  }, [users, sortState]);
-
-  const filteredUsers = useMemo(() => {
-    const search = debouncedFilter.toLowerCase();
-    return sortedUsers.filter((user) =>
-      user.country.toLowerCase().startsWith(search)
-    );
-  }, [sortedUsers, debouncedFilter]);
-
-  
 
   return (
     <main className="main" aria-live="polite">
       {loading && <Loading />}
       {error && <ErrorMessage message={error} />}
+
       {!loading && !error && (
         <div className="main-div">
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+          <div className='filter-container'>
+            
             <input
               type="text"
               placeholder="🔍 Filter by country..."
