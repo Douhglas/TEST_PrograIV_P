@@ -74,12 +74,33 @@ export default function Index() {
       {error && <ErrorMessage message={error} />}
       {!loading && !error && (
         <div className="main-div">
+          <div className='flex justify-between px-4'>
           <button onClick={toggleTheme} className={`px-4 py-2 border rounded transition-colors duration-300 ${isDark
-              ? "bg-gray-700 text-white border-gray-600 hover:bg-gray-100 hover:text-gray-800"
-              : "bg-gray-300 text-black border-gray-500 hover:bg-gray-800 hover:text-gray-100"
+            ? "bg-gray-700 text-white border-gray-600 hover:bg-gray-100 hover:text-gray-800"
+            : "bg-gray-300 text-black border-gray-500 hover:bg-gray-800 hover:text-gray-100"
             }`}>
             {isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}
           </button>
+
+          <button
+            onClick={restoreInitialState}
+            disabled={isInitialState}
+            style={{
+              padding: '0.5rem 1rem',
+              backgroundColor: isInitialState ? '#cccccc' : '#4CAF50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: isInitialState ? 'not-allowed' : 'pointer',
+              opacity: isInitialState ? 0.7 : 1,
+              transition: 'background-color 0.2s'
+            }}
+            aria-label="Restore table to initial state"
+          >
+            Restart table
+          </button> 
+          </div>
+
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
             <input
               type="text"
@@ -88,24 +109,10 @@ export default function Index() {
               onChange={(e) => setFilterText(e.target.value)}
               className="filter-input"
             />
-            <button
-              onClick={restoreInitialState}
-              disabled={isInitialState}
-              style={{
-                padding: '0.5rem 1rem',
-                backgroundColor: isInitialState ? '#cccccc' : '#4CAF50',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: isInitialState ? 'not-allowed' : 'pointer',
-                opacity: isInitialState ? 0.7 : 1,
-                transition: 'background-color 0.2s'
-              }}
-              aria-label="Restore table to initial state"
-            >
-              Restaurar
-            </button>
           </div>
+
+
+
 
           <UserTable
             users={filteredUsers}
