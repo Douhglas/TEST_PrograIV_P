@@ -1,11 +1,14 @@
 # UNIVERSIDAD NACIONAL
 
-**Sede Regional Brunca**\  
-**EIF209 Programación IV**\  
+**Sede Regional Brunca**  
+**EIF209 Programación IV**  
 **Prof. Ruben Mora Vargas – Prof. Juan Gamboa Abarca**
 
 ## Examen 1 – Aplicación Web con React, Remix y Flask
 
+## 📘 Descripción del proyecto
+
+Este proyecto consiste en una aplicación web construida con React 18, Remix y TypeScript que permite visualizar, filtrar, ordenar y eliminar usuarios provenientes de una API desarrollada en Flask. Se diseñó siguiendo principios de rendimiento, buena experiencia de usuario, y separación de responsabilidades. La aplicación presenta los datos en una tabla dinámica, con soporte para filtrado por país, ordenamiento por columnas y restauración del estado original sin volver a consultar el backend.
 
 
 ## 📋 Integrantes
@@ -84,7 +87,7 @@ Aplicado a `UserRow` y `UserTable` para evitar renders si sus props no cambian.
 
 ### ✅ 4. `useDebounce` en la búsqueda
 
-Permite ejecutar el filtro solo después de una pausa en la escritura del usuario, reduciendo cálculos.
+Permite ejecutar el filtro solo después de una pausa en la escritura del usuario, reduciendo el numero de peticiones.
 
 
 
@@ -112,3 +115,17 @@ El backend en Flask fue desplegado en [Render.com](https://render.com), mientras
 
 🔗 **URL de la aplicación:** [https://tu-dominio.vercel.app](https://tu-dominio.vercel.app) *(actualizar con el real)*
 
+
+
+## 📬 Entrega
+
+Este repositorio fue compartido con la cuenta del profesor **RubenMoraAI** en GitHub y el enlace fue enviado al correo oficial.
+
+
+## 🎓 Conclusión y aprendizajes del grupo
+
+Este proyecto nos permitió aprender a trabajar de forma colaborativa, distribuyendo responsabilidades y respetando el trabajo individual de cada miembro. Aplicamos buenas prácticas como el control de errores y estados de carga visibles, lo cual mejora la experiencia del usuario, especialmente en condiciones de red lentas.
+
+También aprendimos sobre diseño responsivo, implementación de temas claro/oscuro, modularidad del código y despliegue tanto del frontend como del backend. Se hizo uso de useMemo, useCallback, y React.memo para optimizar el rendimiento, así como de hooks personalizados y componentes funcionales para promover la reutilización del código.
+
+Finalmente, se implementó un sistema de caché para restaurar el estado original de la tabla sin tener que volver a llamar al backend, lo que consolidó nuestra comprensión sobre el manejo eficiente del estado y la separación de responsabilidades en aplicaciones web modernas.
