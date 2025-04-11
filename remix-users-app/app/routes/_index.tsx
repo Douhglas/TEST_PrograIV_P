@@ -58,7 +58,11 @@ export default function Index() {
 
   return (
     <main className="main bg-white text-black dark:bg-zinc-900 dark:text-white" aria-live="polite">
-      <button onClick={toggleTheme} className="px-4 py-2 border rounded">
+      <button onClick={toggleTheme}   className={`px-4 py-2 border rounded transition-colors duration-300 ${
+    isDark
+      ? "bg-gray-700 text-white border-gray-600 hover:bg-gray-100 hover:text-gray-800"
+      : "bg-gray-300 text-black border-gray-500 hover:bg-gray-800 hover:text-gray-100"
+  }`}>
         {isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}
       </button>
       {loading && <Loading />}
@@ -74,7 +78,6 @@ export default function Index() {
               className="filter-input"
             />
           </div>
-
           <UserTable
             users={filteredUsers}
             onDelete={handleDelete}

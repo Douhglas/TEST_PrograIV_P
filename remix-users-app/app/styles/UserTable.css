@@ -18,7 +18,12 @@
   --button-bg: #ff4d4d;
   --button-bg-hover: #e60000;
 
-  
+  --bg-color: var(--bg-light);
+  --text-color: var(--text-light);
+  --header-bg: var(--header-bg-light);
+  --row-even: var(--row-even-light);
+  --row-odd: var(--row-odd-light);
+  --border-color: var(--border-color-light);
 }
 
 .dark {
@@ -31,14 +36,6 @@
 
 }
 
-.light {
-    --bg-color: var(--bg-light);
-    --text-color: var(--text-light);
-    --header-bg: var(--header-bg-light);
-    --row-even: var(--row-even-light);
-    --row-odd: var(--row-odd-light);
-    --border-color: var(--border-color-light);
-}
 
 table {
   width: 100%;
