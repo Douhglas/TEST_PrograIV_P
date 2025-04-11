@@ -69,7 +69,7 @@ export default function Index() {
   }, [sortedUsers, debouncedFilter]);
 
   return (
-    <main className="main" aria-live="polite">
+    <main className="main bg-white text-black dark:bg-zinc-900 dark:text-white" aria-live="polite">
       {loading && <Loading />}
       {error && <ErrorMessage message={error} />}
       {!loading && !error && (
