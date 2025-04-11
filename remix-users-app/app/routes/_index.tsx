@@ -1,11 +1,15 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import type { User } from '~/types';
 import { UserTable } from '~/components/UserTable';
 import { Loading } from '~/components/Loading';
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { useUsers } from '~/hooks/useUsers';
+
+import { useCallback } from 'react';
+import { useSortedAndFilteredUsers } from '~/hooks/useSortedAndFilteredUsers';
 import { useDebounce } from '~/hooks/useDebounce';
 import { useTheme } from '~/components/ThemeProvider';
+
 
 export default function Index() {
   const { isDark, toggleTheme } = useTheme();
@@ -20,7 +24,13 @@ export default function Index() {
   });
 
   const [filterText, setFilterText] = useState('');
-  const debouncedFilter = useDebounce(filterText, 300);
+  
+  const filteredUsers = useSortedAndFilteredUsers(
+    users,
+    sortState.column,
+    sortState.ascending,
+    filterText
+  );
 
   useEffect(() => {
     if (filterText === '') {
@@ -28,16 +38,19 @@ export default function Index() {
     }
   }, [filterText]);
 
-  const handleDelete = (id: string) => {
-    setUsers((prev) => prev.filter((user) => user.id !== id));
-  };
+  const handleDelete = useCallback(
+    (id: string) => {
+      setUsers((prev) => prev.filter((user) => user.id !== id));
+    },
+    [setUsers]
+  );
 
-  const handleSort = (column: keyof User) => {
-    setSortState((prev) => ({
-      column,
-      ascending: column === prev.column ? !prev.ascending : true,
-    }));
-  };
+  const handleSort = useCallback((column: keyof User) => {
+      setSortState((prev) => ({
+        column,
+        ascending: column === prev.column ? !prev.ascending : true,
+      }));
+    }, []);
 
   const restoreInitialState = () => {
     restoreUsers();
@@ -97,7 +110,6 @@ export default function Index() {
             </button>
           </div>
 
-          {/* Filtro - extendido */}
           <div className="mt-4 mb-6 px-2 sm:px-0">
             <input
               type="text"
@@ -108,7 +120,6 @@ export default function Index() {
             />
           </div>
 
-          {/* Vista Desktop - Tabla normal */}
           <div className="hidden md:block">
             <UserTable
               users={filteredUsers}
@@ -118,7 +129,6 @@ export default function Index() {
             />
           </div>
 
-          {/* Vista Mobile - Tarjetas extendidas */}
           <div className="md:hidden space-y-4 px-2">
             {filteredUsers.length === 0 ? (
               <div className="text-center py-8 text-gray-500 dark:text-gray-400">
@@ -147,7 +157,7 @@ export default function Index() {
                       onClick={() => handleDelete(user.id)}
                       className="px-4 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-colors"
                     >
-                      Eliminar
+                      Delete
                     </button>
                   </div>
                 </div>
