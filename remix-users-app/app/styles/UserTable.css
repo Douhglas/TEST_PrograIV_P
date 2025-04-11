@@ -17,28 +17,22 @@
 
   --button-bg: #ff4d4d;
   --button-bg-hover: #e60000;
+
+  --bg-color: var(--bg-light);
+  --text-color: var(--text-light);
+  --header-bg: var(--header-bg-light);
+  --row-even: var(--row-even-light);
+  --row-odd: var(--row-odd-light);
+  --border-color: var(--border-color-light);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
+.dark {
     --bg-color: var(--bg-dark);
     --text-color: var(--text-dark);
     --header-bg: var(--header-bg-dark);
     --row-even: var(--row-even-dark);
     --row-odd: var(--row-odd-dark);
     --border-color: var(--border-color-dark);
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg-color: var(--bg-light);
-    --text-color: var(--text-light);
-    --header-bg: var(--header-bg-light);
-    --row-even: var(--row-even-light);
-    --row-odd: var(--row-odd-light);
-    --border-color: var(--border-color-light);
-  }
 }
 
 table {
@@ -214,10 +208,3 @@ th {
   outline: none;
   border-color: #888;
   box-shadow: 0 0 0 3px rgba(100, 100, 255, 0.2);
-}
-
-.filter-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-}
