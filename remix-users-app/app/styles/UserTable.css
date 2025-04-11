@@ -215,3 +215,9 @@ th {
   border-color: #888;
   box-shadow: 0 0 0 3px rgba(100, 100, 255, 0.2);
 }
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { UserRowProps } from '../types';
 
-export const UserRow: React.FC<UserRowProps> = ({ user, index, onDelete }) => {
+export const UserRow: React.FC<UserRowProps> = React.memo(({ user, index, onDelete }) => {
   const rowClass = index % 2 === 0 ? 'even-row' : 'odd-row';
 
   return (
@@ -15,4 +15,4 @@ export const UserRow: React.FC<UserRowProps> = ({ user, index, onDelete }) => {
       </td>
     </tr>
   );
-};
+});
