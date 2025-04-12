@@ -7,6 +7,7 @@ import { useUsers } from '~/hooks/useUsers';
 import { useSortedAndFilteredUsers } from '~/hooks/useSortedAndFilteredUsers';
 import { useDebounce } from '~/hooks/useDebounce';
 import { useTheme } from '~/components/ThemeProvider';
+import '~/styles/styles.css';
 
 export default function Index() {
   const { isDark, toggleTheme } = useTheme();
