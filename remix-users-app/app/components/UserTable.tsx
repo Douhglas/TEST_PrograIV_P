@@ -1,5 +1,5 @@
 import React from 'react';
-import '~/styles/UserTable.css';
+import '~/styles/styles.css';
 import { UserTableProps } from '../types';
 import { UserRow } from './UserRow';
 import { useCallback } from 'react';
