@@ -121,7 +121,7 @@ body {
 }
 
 .restart-btn-disabled:hover {
-  background-color: #767c85b0;
+  background-color: #dbdde09d;
   cursor: not-allowed;
   color: #666;
 }
