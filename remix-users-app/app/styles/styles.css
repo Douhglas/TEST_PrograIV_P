@@ -26,6 +26,14 @@
   --row-even: var(--row-even-light);
   --row-odd: var(--row-odd-light);
   --border-color: var(--border-color-light);
+  
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .dark {
@@ -38,15 +46,27 @@
 }
 
 .main-div {
-  padding-left: 7em;
-  padding-right: 7em;
-  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
   margin: 0 auto;
+  width: 100%;
+  margin: 0;
   color: var(--text-light);
 }
 
 .main {
   padding: 2em;
+  margin: 0;
+  width: 100%;
+  background-color: var(--bg-color);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 .flex-between {
