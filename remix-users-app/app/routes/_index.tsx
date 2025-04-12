@@ -7,6 +7,7 @@ import { useUsers } from '~/hooks/useUsers';
 import { useSortedAndFilteredUsers } from '~/hooks/useSortedAndFilteredUsers';
 import { useDebounce } from '~/hooks/useDebounce';
 import { useTheme } from '~/components/ThemeProvider';
+import { usePagination } from '~/hooks/usePagination'
 import '~/styles/styles.css';
 
 export default function Index() {
@@ -30,6 +31,11 @@ export default function Index() {
     filterText
   );
 
+  const {currentPage, totalPages, currentItems: currentUsers, goToNextPage,
+    goToPreviousPage,
+    goToPage,
+  } = usePagination(filteredUsers, 10);
+
   useEffect(() => {
     if (filterText === '') {
       setSortState({ column: 'country', ascending: true });
@@ -42,6 +48,14 @@ export default function Index() {
     },
     [setUsers]
   );
+
+  useEffect(() => {
+    if (totalPages === 0) {
+      goToPage(0); 
+    } else if (currentPage > totalPages) {
+      goToPage(totalPages); 
+    }
+  }, [totalPages, currentPage, goToPage]);
 
   const handleSort = useCallback((column: keyof User) => {
     setSortState((prev) => ({
@@ -99,14 +113,34 @@ export default function Index() {
             />
           </div>
 
-          <div className="desktop-table">
+          <div className="hidden md:block">
             <UserTable
-              users={filteredUsers}
+              users={currentUsers}
               onDelete={handleDelete}
               onSort={handleSort}
               sortState={sortState}
             />
           </div>
+
+          <div className="pagination-controls flex justify-center mt-4">
+            <button
+              onClick={goToPreviousPage}
+              disabled={currentPage === 1 || totalPages === 0}
+              className="px-4 py-2 border rounded mr-2 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2">
+              Page {totalPages === 0 ? 0 : currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages || totalPages === 0}
+              className="px-4 py-2 border rounded ml-2 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>  
 
           <div className="mobile-cards stacked-elements horizontal-padding">
             {filteredUsers.length === 0 ? (
