@@ -31,7 +31,7 @@ export default function Index() {
     filterText
   );
 
-  const {currentPage, totalPages, currentItems: currentUsers, goToNextPage,
+  const { currentPage, totalPages, currentItems: currentUsers, goToNextPage,
     goToPreviousPage,
     goToPage,
   } = usePagination(filteredUsers, 10);
@@ -51,9 +51,9 @@ export default function Index() {
 
   useEffect(() => {
     if (totalPages === 0) {
-      goToPage(0); 
+      goToPage(0);
     } else if (currentPage > totalPages) {
-      goToPage(totalPages); 
+      goToPage(totalPages);
     }
   }, [totalPages, currentPage, goToPage]);
 
@@ -113,7 +113,7 @@ export default function Index() {
             />
           </div>
 
-          <div className="hidden md:block">
+          <div className="desktop-table">
             <UserTable
               users={currentUsers}
               onDelete={handleDelete}
@@ -122,31 +122,11 @@ export default function Index() {
             />
           </div>
 
-          <div className="pagination-controls flex justify-center mt-4">
-            <button
-              onClick={goToPreviousPage}
-              disabled={currentPage === 1 || totalPages === 0}
-              className="px-4 py-2 border rounded mr-2 disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="px-4 py-2">
-              Page {totalPages === 0 ? 0 : currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={goToNextPage}
-              disabled={currentPage === totalPages || totalPages === 0}
-              className="px-4 py-2 border rounded ml-2 disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>  
-
           <div className="mobile-cards stacked-elements horizontal-padding">
-            {filteredUsers.length === 0 ? (
+            {currentUsers.length === 0 ? (
               <div className="empty-message">No users found</div>
             ) : (
-              filteredUsers.map((user) => (
+              currentUsers.map((user) => (
                 <div key={user.id} className="user-card">
                   <div className="user-info-container">
                     <img
@@ -172,6 +152,23 @@ export default function Index() {
                 </div>
               ))
             )}
+          </div>
+          <div className ="pagination-controls">
+            <button
+              onClick={goToPreviousPage}
+              disabled={currentPage === 1 || totalPages === 0}
+            >
+              Previous
+            </button>
+            <span>
+              Page {totalPages === 0 ? 0 : currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages || totalPages === 0}
+            >
+              Next
+            </button>
           </div>
         </div>
       )}
