@@ -9,6 +9,7 @@ import type { LinksFunction } from "@remix-run/node";
 import '~/styles/styles.css';
 import { ThemeProvider } from "./components/ThemeProvider";
 
+
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -31,8 +32,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
+      <body className="bg-white dark:bg-zinc-900 transition-colors duration-300">
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
