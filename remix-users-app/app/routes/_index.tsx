@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { User } from '~/types';
 import { UserTable } from '~/components/UserTable';
 import { Loading } from '~/components/Loading';
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { useUsers } from '~/hooks/useUsers';
-
-import { useCallback } from 'react';
 import { useSortedAndFilteredUsers } from '~/hooks/useSortedAndFilteredUsers';
 import { useDebounce } from '~/hooks/useDebounce';
 import { useTheme } from '~/components/ThemeProvider';
-
+import { usePagination } from '~/hooks/usePagination'
+import '~/styles/styles.css';
 
 export default function Index() {
   const { isDark, toggleTheme } = useTheme();
@@ -24,13 +23,18 @@ export default function Index() {
   });
 
   const [filterText, setFilterText] = useState('');
-  
+
   const filteredUsers = useSortedAndFilteredUsers(
     users,
     sortState.column,
     sortState.ascending,
     filterText
   );
+
+  const { currentPage, totalPages, currentItems: currentUsers, goToNextPage,
+    goToPreviousPage,
+    goToPage,
+  } = usePagination(filteredUsers, 10);
 
   useEffect(() => {
     if (filterText === '') {
@@ -45,12 +49,20 @@ export default function Index() {
     [setUsers]
   );
 
+  useEffect(() => {
+    if (totalPages === 0) {
+      goToPage(0);
+    } else if (currentPage > totalPages) {
+      goToPage(totalPages);
+    }
+  }, [totalPages, currentPage, goToPage]);
+
   const handleSort = useCallback((column: keyof User) => {
-      setSortState((prev) => ({
-        column,
-        ascending: column === prev.column ? !prev.ascending : true,
-      }));
-    }, []);
+    setSortState((prev) => ({
+      column,
+      ascending: column === prev.column ? !prev.ascending : true,
+    }));
+  }, []);
 
   const restoreInitialState = () => {
     restoreUsers();
@@ -65,80 +77,74 @@ export default function Index() {
     users.length === originalUsers.length;
 
   return (
-    <main className="main bg-white text-black dark:bg-zinc-900 dark:text-white px-0 sm:px-4" aria-live="polite">
+    <main className="main" aria-live="polite">
       {loading && <Loading />}
       {error && <ErrorMessage message={error} />}
 
       {!loading && !error && (
         <div className="main-div">
-          {/* Controles superiores - extendidos */}
-          <div className='flex justify-between px-2 sm:px-4 gap-2 sm:gap-4'>
-            <button onClick={toggleTheme} className={`px-3 sm:px-4 py-2 border rounded transition-colors duration-300 flex-1 sm:flex-none ${isDark
-              ? "bg-gray-700 text-white border-gray-600 hover:bg-gray-100 hover:text-gray-800"
-              : "bg-gray-300 text-black border-gray-500 hover:bg-gray-800 hover:text-gray-100"
-              }`}>
-              {isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}
+          <div className="flex-between">
+            <button
+              onClick={toggleTheme}
+              className={'toggle-theme-btn' + (isDark ? '-dark' : '')}
+            >
+              {isDark ? '☀️ Light Mode' : '🌙 Dark Mode'}
             </button>
 
             <button
               onClick={restoreInitialState}
               disabled={isInitialState}
-              className={`px-3 sm:px-4 py-2 rounded transition-colors duration-300 flex-1 sm:flex-none ${isInitialState
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-green-500 hover:bg-green-600 text-white"
-                }`}
+              className={
+                'restart-btn' + (isInitialState ? ' restart-btn-disabled' : '')
+              }
               aria-label="Restore table to initial state"
             >
               Restart 🔄
             </button>
           </div>
 
-          <div className="mt-4 mb-6 px-2 sm:px-0">
+          <div className="filter-container">
             <input
               type="text"
               placeholder="🔍 Filter by country..."
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
-              className="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+              className="filter-input"
             />
           </div>
 
-          <div className="hidden md:block">
+          <div className="desktop-table">
             <UserTable
-              users={filteredUsers}
+              users={currentUsers}
               onDelete={handleDelete}
               onSort={handleSort}
               sortState={sortState}
             />
           </div>
 
-          <div className="md:hidden space-y-4 px-2">
-            {filteredUsers.length === 0 ? (
-              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                No users found
-              </div>
+          <div className="mobile-cards stacked-elements horizontal-padding">
+            {currentUsers.length === 0 ? (
+              <div className="empty-message">No users found</div>
             ) : (
-              filteredUsers.map((user) => (
-                <div key={user.id} className="border rounded-lg p-4 dark:border-gray-700 w-full">
-                  <div className="flex items-center space-x-3">
+              currentUsers.map((user) => (
+                <div key={user.id} className="user-card">
+                  <div className="user-info-container">
                     <img
                       src={user.photo}
                       alt={`${user.firstName} ${user.lastName}`}
-                      className="w-10 h-10 rounded-full"
+                      className="profile-image"
                     />
-                    <div className="flex-1 min-w-0">
-                      <p className="truncate font-medium dark:text-white">
+                    <div className="text-container">
+                      <p className="user-name">
                         {user.firstName} {user.lastName}
                       </p>
-                      <p className="truncate text-gray-600 dark:text-gray-300">
-                        {user.country}
-                      </p>
+                      <p className="user-country">{user.country}</p>
                     </div>
                   </div>
-                  <div className="mt-3 flex justify-center">
+                  <div className="delete-button-container">
                     <button
                       onClick={() => handleDelete(user.id)}
-                      className="px-4 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-colors"
+                      className="delete-button"
                     >
                       Delete
                     </button>
@@ -146,6 +152,23 @@ export default function Index() {
                 </div>
               ))
             )}
+          </div>
+          <div className ="pagination-controls">
+            <button
+              onClick={goToPreviousPage}
+              disabled={currentPage === 1 || totalPages === 0}
+            >
+              Previous
+            </button>
+            <span>
+              Page {totalPages === 0 ? 0 : currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages || totalPages === 0}
+            >
+              Next
+            </button>
           </div>
         </div>
       )}

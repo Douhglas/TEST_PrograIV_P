@@ -8,7 +8,7 @@ export function useSortedAndFilteredUsers(
   ascending: boolean,
   filterText: string
 ) {
-  const debouncedFilter = useDebounce(filterText, 300);
+  const debouncedFilter = useDebounce(filterText, 800);
 
   const sortedUsers = useMemo(() => {
     return [...users].sort((a, b) => {
